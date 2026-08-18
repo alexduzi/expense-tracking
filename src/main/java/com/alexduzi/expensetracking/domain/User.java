@@ -16,6 +16,10 @@ public class User {
     private String email;
     @Column(length = 50)
     private String password;
+    @Column(length = 255)
+    private String address;
+    @Column(length = 20)
+    private String zipcode;
 
     @OneToOne
     @JoinColumn(name = "account_id")
@@ -67,6 +71,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
     }
 
     @Override
