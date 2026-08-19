@@ -1,7 +1,10 @@
 package com.alexduzi.expensetracking.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -19,8 +22,12 @@ public class Account {
     @Column(length = 10)
     private String accountNumber;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @CreationTimestamp
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
     private Instant createdAt;
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Instant updatedAt;
 
     public Account() {
     }
@@ -55,6 +62,14 @@ public class Account {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override

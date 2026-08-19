@@ -1,6 +1,8 @@
 package com.alexduzi.expensetracking.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -34,8 +36,12 @@ public class RecurringTransaction {
     private LocalDate nextDueDate;
     private Boolean active;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @CreationTimestamp
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
     private Instant createdAt;
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Instant updatedAt;
 
     public RecurringTransaction() {
 
@@ -119,6 +125,14 @@ public class RecurringTransaction {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override

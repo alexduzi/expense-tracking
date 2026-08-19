@@ -1,6 +1,8 @@
 package com.alexduzi.expensetracking.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -15,16 +17,19 @@ public class User {
     private Long id;
     @Column(length = 20)
     private String name;
-    @Column(length = 100, unique = true)
+    @Column(length = 255, unique = true)
     private String email;
-    @Column(length = 50)
     private String password;
-    @Column(length = 255)
     private String address;
     @Column(length = 20)
     private String zipcode;
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+
+    @CreationTimestamp
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
     private Instant createdAt;
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Instant updatedAt;
 
     @OneToOne
     @JoinColumn(name = "account_id")
@@ -112,6 +117,14 @@ public class User {
 
     public void setGoals(Set<Goal> goal) {
         this.goals = goal;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.alexduzi.expensetracking.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -28,8 +30,13 @@ public class Budget {
     private PeriodType period;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+
+    @CreationTimestamp
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
     private Instant createdAt;
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Instant updatedAt;
 
     public Budget() {
 
@@ -97,6 +104,14 @@ public class Budget {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
