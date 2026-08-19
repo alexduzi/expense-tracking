@@ -3,23 +3,28 @@ package com.alexduzi.expensetracking.domain;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "goal")
+@Table(name = "tb_goal")
 public class Goal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     private String title;
     private BigDecimal targetAmount;
     private BigDecimal currentAmount;
     private LocalDate targetDate;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
     public Goal() {}
 
@@ -71,15 +76,23 @@ public class Goal {
         this.targetDate = targetDate;
     }
 
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Goal goal)) return false;
-        return Objects.equals(id, goal.id) && Objects.equals(user, goal.user) && Objects.equals(title, goal.title) && Objects.equals(targetAmount, goal.targetAmount) && Objects.equals(currentAmount, goal.currentAmount) && Objects.equals(targetDate, goal.targetDate);
+        return Objects.equals(id, goal.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, title, targetAmount, currentAmount, targetDate);
+        return Objects.hash(id);
     }
 
     @Override

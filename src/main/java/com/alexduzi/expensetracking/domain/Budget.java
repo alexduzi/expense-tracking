@@ -3,24 +3,33 @@ package com.alexduzi.expensetracking.domain;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "budget")
+@Table(name = "tb_budget")
 public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private Set<Category> categories;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     private BigDecimal amountLimit;
     private PeriodType period;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
     public Budget() {
 
@@ -42,12 +51,20 @@ public class Budget {
         this.id = id;
     }
 
-    public Set<Category> getCategories() {
-        return categories;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
     public BigDecimal getAmountLimit() {
@@ -85,15 +102,12 @@ public class Budget {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Budget budget)) return false;
-        return Objects.equals(id, budget.id) && Objects.equals(user, budget.user) &&
-                Objects.equals(categories, budget.categories) &&
-                Objects.equals(amountLimit, budget.amountLimit) && period == budget.period &&
-                Objects.equals(startDate, budget.startDate) && Objects.equals(endDate, budget.endDate);
+        return Objects.equals(id, budget.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, categories, amountLimit, period, startDate, endDate);
+        return Objects.hash(id);
     }
 
     @Override

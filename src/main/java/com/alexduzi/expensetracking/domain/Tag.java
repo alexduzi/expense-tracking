@@ -2,10 +2,11 @@ package com.alexduzi.expensetracking.domain;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tag")
+@Table(name = "tb_tag")
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +15,8 @@ public class Tag {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
     public Tag() {
 
@@ -43,15 +46,23 @@ public class Tag {
         this.name = name;
     }
 
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Tag tag)) return false;
-        return Objects.equals(id, tag.id) && Objects.equals(name, tag.name) && Objects.equals(user, tag.user);
+        return Objects.equals(id, tag.id) && Objects.equals(name, tag.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, user);
+        return Objects.hash(id, name);
     }
 
     @Override

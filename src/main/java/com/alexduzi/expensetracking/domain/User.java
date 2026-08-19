@@ -2,17 +2,20 @@ package com.alexduzi.expensetracking.domain;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "tb_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 20)
     private String name;
-    @Column(length = 100)
+    @Column(length = 100, unique = true)
     private String email;
     @Column(length = 50)
     private String password;
@@ -20,18 +23,16 @@ public class User {
     private String address;
     @Column(length = 20)
     private String zipcode;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+    @OneToMany
+    @JoinColumn(name = "goal_id")
+    private Set<Goal> goals = new HashSet<>();
 
     public User() {
     }
@@ -89,15 +90,39 @@ public class User {
         this.zipcode = zipcode;
     }
 
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Set<Goal> getGoals() {
+        return goals;
+    }
+
+    public void setGoals(Set<Goal> goal) {
+        this.goals = goal;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User user)) return false;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(password, user.password);
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, password);
+        return Objects.hash(id, email);
     }
 
     @Override

@@ -3,12 +3,13 @@ package com.alexduzi.expensetracking.domain;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "recurring_transaction")
+@Table(name = "tb_recurring_transaction")
 public class RecurringTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +20,22 @@ public class RecurringTransaction {
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;
-    private Set<Category> category;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+
     private BigDecimal amount;
+    @Enumerated(EnumType.STRING)
     private TransactionType type;
+    @Enumerated(EnumType.STRING)
     private RecurringFrequencyType frequency;
     private LocalDate nextDueDate;
     private Boolean active;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
     public RecurringTransaction() {
 
@@ -54,11 +65,11 @@ public class RecurringTransaction {
         this.account = account;
     }
 
-    public Set<Category> getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Set<Category> category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -102,15 +113,23 @@ public class RecurringTransaction {
         this.active = active;
     }
 
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof RecurringTransaction that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(user, that.user) && Objects.equals(account, that.account) && Objects.equals(amount, that.amount);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, account, amount);
+        return Objects.hash(id);
     }
 
     @Override

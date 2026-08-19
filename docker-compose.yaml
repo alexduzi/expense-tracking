@@ -7,7 +7,7 @@ services:
     image: postgres:14-alpine
     container_name: dev-postgresql
     environment:
-      POSTGRES_DB: expensetracking_db
+      POSTGRES_DB: db_expensetracking
       POSTGRES_PASSWORD: 1234567
     ports:
       - "5433:5432"
@@ -15,6 +15,25 @@ services:
       - ./.data/postgresql/data:/var/lib/postgresql/data
     networks:
       - dev-network
+
+  # ====================================================================================================================
+  # APP
+  # ====================================================================================================================
+  app:
+    build: .
+    container_name: expense-tracking-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      pg-docker:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/expensetracking_db
+      DB_USER: app
+      DB_PASS: 1234567
+      JWT_DURATION: 86400
+      JWT_SECRET: ZXNnLXJlc2lkdW9zLWFwaS1zZWNyZXQta2V5LWZvci1hY2FkZW1pYy1wdXJwb3Nlcy0yMDI1
 # ======================================================================================================================
 # REDE
 # ======================================================================================================================

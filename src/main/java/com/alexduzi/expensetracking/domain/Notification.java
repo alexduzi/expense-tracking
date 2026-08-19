@@ -2,23 +2,26 @@ package com.alexduzi.expensetracking.domain;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "notification")
+@Table(name = "tb_notification")
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     private String title;
     private String message;
     private Boolean read;
-    private LocalDateTime createdAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
     public Notification() {}
 
@@ -62,23 +65,23 @@ public class Notification {
         this.read = read;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Notification that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(user, that.user) && Objects.equals(title, that.title) && Objects.equals(message, that.message) && Objects.equals(read, that.read) && Objects.equals(createdAt, that.createdAt);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, title, message, read, createdAt);
+        return Objects.hash(id);
     }
 
     @Override

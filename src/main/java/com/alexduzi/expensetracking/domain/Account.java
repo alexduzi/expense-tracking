@@ -2,8 +2,11 @@ package com.alexduzi.expensetracking.domain;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
+import java.util.Objects;
+
 @Entity
-@Table(name = "account")
+@Table(name = "tb_account")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +18,9 @@ public class Account {
 
     @Column(length = 10)
     private String accountNumber;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
     public Account() {
     }
@@ -41,5 +47,31 @@ public class Account {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Account account)) return false;
+        return Objects.equals(id, account.id) && Objects.equals(accountNumber, account.accountNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, accountNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountNumber='" + accountNumber + '\'' +
+                '}';
     }
 }
