@@ -5,9 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_user")
@@ -15,37 +13,38 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(length = 20)
     private String name;
+
     @Column(length = 255, unique = true)
     private String email;
+
     private String password;
+
     private String address;
+
     @Column(length = 20)
     private String zipcode;
 
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
     private Instant createdAt;
+
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
     private Instant updatedAt;
 
-    @OneToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Account> accounts = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "goal_id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Goal> goals = new HashSet<>();
 
-    public User() {
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Goal> notifications = new ArrayList<>();
 
-    public User(String name, String email) {
-        this.name = name;
-        this.email = email;
-    }
+    public User() {}
 
     public Long getId() {
         return id;
@@ -103,22 +102,6 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public Set<Goal> getGoals() {
-        return goals;
-    }
-
-    public void setGoals(Set<Goal> goal) {
-        this.goals = goal;
-    }
-
     public Instant getUpdatedAt() {
         return updatedAt;
     }
@@ -127,21 +110,46 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public Set<Goal> getGoals() {
+        return goals;
+    }
+
+    public void setGoals(Set<Goal> goals) {
+        this.goals = goals;
+    }
+
+    public List<Goal> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Goal> notifications) {
+        this.notifications = notifications;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User user)) return false;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email);
+        return Objects.hash(id, name, email);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' + '}';
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

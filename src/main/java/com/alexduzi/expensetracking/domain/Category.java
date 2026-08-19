@@ -22,12 +22,12 @@ public class Category {
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
     private Instant createdAt;
+
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
     private Instant updatedAt;
 
-    public Category() {
-    }
+    public Category() {}
 
     public Long getId() {
         return id;

@@ -15,20 +15,19 @@ public class Subcategory {
     private Long id;
     private String name;
 
+    @CreationTimestamp
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
+    private Instant createdAt;
+
+    @UpdateTimestamp
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
+    private Instant updatedAt;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @CreationTimestamp
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
-    private Instant createdAt;
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private Instant updatedAt;
-
-    public Subcategory() {
-
-    }
+    public Subcategory() {}
 
     public Long getId() {
         return id;

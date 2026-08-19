@@ -1,5 +1,6 @@
 package com.alexduzi.expensetracking.domain;
 
+import com.alexduzi.expensetracking.enums.PeriodType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -7,9 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "tb_budget")
@@ -18,37 +17,34 @@ public class Budget {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal amountLimit = BigDecimal.ZERO;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    private BigDecimal amountLimit;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PeriodType period;
+
     private LocalDateTime startDate;
+
     private LocalDateTime endDate;
 
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
     private Instant createdAt;
+
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
     private Instant updatedAt;
 
-    public Budget() {
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public Budget() {}
 
     public Long getId() {
         return id;
@@ -64,14 +60,6 @@ public class Budget {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
     }
 
     public BigDecimal getAmountLimit() {
@@ -106,12 +94,28 @@ public class Budget {
         this.endDate = endDate;
     }
 
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Instant getUpdatedAt() {
         return updatedAt;
     }
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

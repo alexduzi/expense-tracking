@@ -1,4 +1,4 @@
-package com.alexduzi.expensetracking.domain;
+package com.alexduzi.expensetracking.enums;
 
 public enum RecurringFrequencyType {
     DAILY,

@@ -16,21 +16,29 @@ public class Goal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
+    @Column(length = 50, nullable = false)
     private String title;
-    private BigDecimal targetAmount;
-    private BigDecimal currentAmount;
+
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal targetAmount = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal currentAmount = BigDecimal.ZERO;
+
+    @Column(nullable = false)
     private LocalDate targetDate;
 
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
     private Instant createdAt;
+
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
     private Instant updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Goal() {}
 
@@ -40,14 +48,6 @@ public class Goal {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getTitle() {
@@ -98,21 +98,30 @@ public class Goal {
         this.updatedAt = updatedAt;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Goal goal)) return false;
-        return Objects.equals(id, goal.id);
+        return Objects.equals(id, goal.id) && Objects.equals(title, goal.title) && Objects.equals(user, goal.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, title, user);
     }
 
     @Override
     public String toString() {
         return "Goal{" +
                 "title='" + title + '\'' +
+                ", user=" + user +
                 '}';
     }
 }

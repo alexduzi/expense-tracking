@@ -14,20 +14,20 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
     private Instant createdAt;
+
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
     private Instant updatedAt;
 
-    public Tag() {
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    }
+    public Tag() {}
 
     public User getUser() {
         return user;
