@@ -1,0 +1,36 @@
+package com.alexduzi.expensetracking.controller;
+
+import com.alexduzi.expensetracking.dto.request.CreateAccountRequest;
+import com.alexduzi.expensetracking.dto.response.AccountResponse;
+import com.alexduzi.expensetracking.service.AccountService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping(path = "${api.prefix}/account")
+public class AccountController {
+    private final AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<AccountResponse> create(@Valid @RequestBody CreateAccountRequest request) {
+        AccountResponse result = accountService.create(request);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{accountNumber}")
+                .buildAndExpand(result.accountNumber())
+                .toUri();
+        return ResponseEntity.created(location).body(result);
+    }
+}
