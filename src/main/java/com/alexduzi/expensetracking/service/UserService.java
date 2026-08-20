@@ -5,7 +5,6 @@ import com.alexduzi.expensetracking.dto.request.CreateUserRequest;
 import com.alexduzi.expensetracking.dto.response.UserResponse;
 import com.alexduzi.expensetracking.exception.DatabaseException;
 import com.alexduzi.expensetracking.exception.UserExistsException;
-import com.alexduzi.expensetracking.exception.UserNotFoundException;
 import com.alexduzi.expensetracking.mapper.UserMapper;
 import com.alexduzi.expensetracking.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +16,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
