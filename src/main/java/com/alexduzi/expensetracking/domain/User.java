@@ -134,6 +134,16 @@ public class User {
         this.notifications = notifications;
     }
 
+    public void addAccount(Account account) {
+        this.accounts.add(account);
+        account.setUser(this);
+    }
+
+    public void removeAccount(Account account) {
+        this.accounts.remove(account);
+        account.setUser(null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User user)) return false;

@@ -19,14 +19,29 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(DatabaseException.class)
     public ResponseEntity<StandardError> databaseError(DatabaseException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        StandardError error = new StandardError(
-                Instant.now(),
-                status.value(),
-                "Create user",
-                e.getMessage(),
-                request.getRequestURI()
-        );
-        return ResponseEntity.status(status).body(error);
+        return ResponseEntity.status(status).body(
+                createStandardError("Database err", status, e, request));
+    }
+
+    @ExceptionHandler(UserExistsException.class)
+    public ResponseEntity<StandardError> userExistsException(UserExistsException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(
+                createStandardError("Create user", status, e, request));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<StandardError> userNotFound(UserNotFoundException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(
+                createStandardError("Create account", status, e, request));
+    }
+
+    @ExceptionHandler(AccountExistsException.class)
+    public ResponseEntity<StandardError> accountExistsException(AccountExistsException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(
+                createStandardError("Create account", status, e, request));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -40,6 +55,16 @@ public class ControllerExceptionHandler {
         });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    private StandardError createStandardError(String message, HttpStatus status, RuntimeException e, HttpServletRequest request) {
+        return new StandardError(
+                Instant.now(),
+                status.value(),
+                message,
+                e.getMessage(),
+                request.getRequestURI()
+        );
     }
 
     // Alternative: Using RFC 7807/9457

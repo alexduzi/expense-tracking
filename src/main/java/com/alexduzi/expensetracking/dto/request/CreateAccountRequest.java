@@ -8,7 +8,7 @@ public record CreateAccountRequest(
         String email,
         String name,
         BigDecimal balance,
-        AccountType type,
+        AccountType accountType,
         String accountNumber,
         String currency
 ) { }

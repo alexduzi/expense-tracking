@@ -1,6 +1,7 @@
 package com.alexduzi.expensetracking.domain;
 
 import com.alexduzi.expensetracking.enums.AccountType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -24,6 +25,7 @@ public class Account {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @JsonProperty("accountType")
     private AccountType type;
 
     @Column(length = 20)
@@ -36,8 +38,8 @@ public class Account {
 
     private String icon;
 
-    @Column(nullable = false)
-    private Boolean active = true;
+    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE", nullable = false)
+    private Boolean active;
 
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
@@ -50,6 +52,11 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @PrePersist
+    public void prePersist() {
+        this.active = true;
+    }
 
     public Account() {}
 

@@ -1,0 +1,7 @@
+package com.alexduzi.expensetracking.exception;
+
+public class AccountExistsException extends RuntimeException {
+    public AccountExistsException(String message) {
+        super(message);
+    }
+}

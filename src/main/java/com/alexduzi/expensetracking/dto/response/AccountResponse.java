@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public record AccountResponse(
         String name,
         BigDecimal balance,
-        AccountType type,
+        AccountType accountType,
         String accountNumber,
         String currency
 ) { }
