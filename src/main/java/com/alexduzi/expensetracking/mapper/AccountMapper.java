@@ -7,13 +7,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AccountMapper {
     AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
     @Mapping(source = "type", target = "accountType")
-    AccountResponse accountToDto(Account acc);
+    AccountResponse toDto(Account entity);
 
     @Mapping(source = "accountType", target = "type")
-    Account accountDtoToAccount(CreateAccountRequest acc);
+    Account toAccount(CreateAccountRequest dto);
 }

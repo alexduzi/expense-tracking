@@ -6,10 +6,10 @@ import com.alexduzi.expensetracking.dto.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserResponse userToUserDto(User user);
-    User userDtoToUser(CreateUserRequest user);
+    UserResponse toDto(User entity);
+    User toUser(CreateUserRequest dto);
 }

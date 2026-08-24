@@ -2,7 +2,6 @@ package com.alexduzi.expensetracking.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,25 +22,18 @@ public class ControllerExceptionHandler {
                 createStandardError("Database err", status, e, request));
     }
 
-    @ExceptionHandler(UserExistsException.class)
-    public ResponseEntity<StandardError> userExistsException(UserExistsException e, HttpServletRequest request) {
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<StandardError> entityAlreadyExistsException(EntityAlreadyExistsException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(
-                createStandardError("Create user", status, e, request));
+                createStandardError(e.getMessage(), status, e, request));
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<StandardError> userNotFound(UserNotFoundException e, HttpServletRequest request) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<StandardError> entityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(
-                createStandardError("Create account", status, e, request));
-    }
-
-    @ExceptionHandler(AccountExistsException.class)
-    public ResponseEntity<StandardError> accountExistsException(AccountExistsException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        return ResponseEntity.status(status).body(
-                createStandardError("Create account", status, e, request));
+                createStandardError(e.getMessage(), status, e, request));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
