@@ -24,8 +24,9 @@ public class UserService {
 
     public UserDTO create(CreateUserDTO createUser) {
         userRepository.findUserByEmail(createUser.email())
-                .orElseThrow(() ->
-                        new EntityAlreadyExistsException(String.format("User with email %s already exists", createUser.email())));
+                .ifPresent((u) -> {
+                            throw new EntityAlreadyExistsException(String.format("User with email %s already exists", createUser.email()));
+                });
 
         User user = userMapper.toUser(createUser);
         user.setPassword(passwordEncoder.encode(createUser.password()));

@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -24,9 +25,12 @@ public class Budget {
     @Column(nullable = false)
     private PeriodType period;
 
-    private LocalDateTime startDate;
+    @Column(length = 30, nullable = false)
+    private String description;
 
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+
+    private LocalDate endDate;
 
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false, nullable = false)
@@ -78,19 +82,19 @@ public class Budget {
         this.period = period;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -118,15 +122,23 @@ public class Budget {
         this.user = user;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Budget budget)) return false;
-        return Objects.equals(id, budget.id);
+        return Objects.equals(id, budget.id) && Objects.equals(description, budget.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, description);
     }
 
     @Override
@@ -134,6 +146,7 @@ public class Budget {
         return "Budget{" +
                 "user=" + user +
                 ", id=" + id +
+                ", description=" + description +
                 ", amountLimit=" + amountLimit +
                 ", period=" + period +
                 '}';
