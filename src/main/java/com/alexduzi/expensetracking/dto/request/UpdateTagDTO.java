@@ -1,4 +1,4 @@
 package com.alexduzi.expensetracking.dto.request;
 
-public record CreateTagRequest(String name) {
+public record UpdateTagDTO(Long id, String name) {
 }

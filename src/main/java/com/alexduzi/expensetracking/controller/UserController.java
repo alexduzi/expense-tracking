@@ -1,7 +1,7 @@
 package com.alexduzi.expensetracking.controller;
 
-import com.alexduzi.expensetracking.dto.request.CreateUserRequest;
-import com.alexduzi.expensetracking.dto.response.UserResponse;
+import com.alexduzi.expensetracking.dto.request.CreateUserDTO;
+import com.alexduzi.expensetracking.dto.response.UserDTO;
 import com.alexduzi.expensetracking.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +24,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@Valid @RequestBody CreateUserRequest request) {
-        UserResponse result = userService.create(request);
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody CreateUserDTO request) {
+        UserDTO result = userService.create(request);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

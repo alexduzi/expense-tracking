@@ -1,8 +1,8 @@
 package com.alexduzi.expensetracking.controller;
 
-import com.alexduzi.expensetracking.dto.request.CreateTagRequest;
-import com.alexduzi.expensetracking.dto.request.UpdateTagRequest;
-import com.alexduzi.expensetracking.dto.response.TagResponse;
+import com.alexduzi.expensetracking.dto.request.CreateTagDTO;
+import com.alexduzi.expensetracking.dto.request.UpdateTagDTO;
+import com.alexduzi.expensetracking.dto.response.TagDTO;
 import com.alexduzi.expensetracking.service.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +21,13 @@ public class TagController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<TagResponse>> findAll() {
+    public ResponseEntity<List<TagDTO>> findAll() {
         return ResponseEntity.ok(tagService.findAll());
     }
 
     @PostMapping("/create")
-    public ResponseEntity<TagResponse> create(@RequestBody CreateTagRequest request) {
-        TagResponse result = tagService.create(request);
+    public ResponseEntity<TagDTO> create(@RequestBody CreateTagDTO request) {
+        TagDTO result = tagService.create(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -37,8 +37,8 @@ public class TagController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<TagResponse> update(@PathVariable Long id, @RequestBody UpdateTagRequest request) {
-        TagResponse result = tagService.update(id, request);
+    public ResponseEntity<TagDTO> update(@PathVariable Long id, @RequestBody UpdateTagDTO request) {
+        TagDTO result = tagService.update(id, request);
         return ResponseEntity.ok(result);
     }
 

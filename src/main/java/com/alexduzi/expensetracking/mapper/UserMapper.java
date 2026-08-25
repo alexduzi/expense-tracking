@@ -1,15 +1,18 @@
 package com.alexduzi.expensetracking.mapper;
 
 import com.alexduzi.expensetracking.domain.User;
-import com.alexduzi.expensetracking.dto.request.CreateUserRequest;
-import com.alexduzi.expensetracking.dto.response.UserResponse;
+import com.alexduzi.expensetracking.dto.request.CreateUserDTO;
+import com.alexduzi.expensetracking.dto.response.UserDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserResponse toDto(User entity);
-    User toUser(CreateUserRequest dto);
+    UserDTO toDto(User entity);
+    User toUser(CreateUserDTO dto);
 }

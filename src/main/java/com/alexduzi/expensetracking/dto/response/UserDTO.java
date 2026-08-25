@@ -1,6 +1,6 @@
 package com.alexduzi.expensetracking.dto.response;
 
-public record UserResponse(
+public record UserDTO(
         String name,
         String email,
         String address,

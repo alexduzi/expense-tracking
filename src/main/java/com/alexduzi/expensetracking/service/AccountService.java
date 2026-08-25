@@ -2,8 +2,8 @@ package com.alexduzi.expensetracking.service;
 
 import com.alexduzi.expensetracking.domain.Account;
 import com.alexduzi.expensetracking.domain.User;
-import com.alexduzi.expensetracking.dto.request.CreateAccountRequest;
-import com.alexduzi.expensetracking.dto.response.AccountResponse;
+import com.alexduzi.expensetracking.dto.request.CreateAccountDTO;
+import com.alexduzi.expensetracking.dto.response.AccountDTO;
 import com.alexduzi.expensetracking.exception.DatabaseException;
 import com.alexduzi.expensetracking.exception.EntityAlreadyExistsException;
 import com.alexduzi.expensetracking.exception.EntityNotFoundException;
@@ -28,7 +28,7 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountResponse create(CreateAccountRequest accRequest) {
+    public AccountDTO create(CreateAccountDTO accRequest) {
         Optional<User> optUser = userRepository.findUserByEmail(accRequest.email());
         if (optUser.isEmpty()) {
             throw new EntityNotFoundException(String.format("User with email %s don't exists", accRequest.email()));

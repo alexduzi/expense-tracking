@@ -4,7 +4,7 @@ import com.alexduzi.expensetracking.enums.AccountType;
 
 import java.math.BigDecimal;
 
-public record CreateAccountRequest(
+public record CreateAccountDTO(
         String email,
         String name,
         BigDecimal balance,

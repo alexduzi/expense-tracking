@@ -1,7 +1,7 @@
 package com.alexduzi.expensetracking.controller;
 
-import com.alexduzi.expensetracking.dto.request.CreateAccountRequest;
-import com.alexduzi.expensetracking.dto.response.AccountResponse;
+import com.alexduzi.expensetracking.dto.request.CreateAccountDTO;
+import com.alexduzi.expensetracking.dto.response.AccountDTO;
 import com.alexduzi.expensetracking.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +23,8 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<AccountResponse> create(@Valid @RequestBody CreateAccountRequest request) {
-        AccountResponse result = accountService.create(request);
+    public ResponseEntity<AccountDTO> create(@Valid @RequestBody CreateAccountDTO request) {
+        AccountDTO result = accountService.create(request);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

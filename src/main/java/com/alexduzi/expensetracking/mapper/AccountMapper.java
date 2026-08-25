@@ -1,19 +1,22 @@
 package com.alexduzi.expensetracking.mapper;
 
 import com.alexduzi.expensetracking.domain.Account;
-import com.alexduzi.expensetracking.dto.request.CreateAccountRequest;
-import com.alexduzi.expensetracking.dto.response.AccountResponse;
+import com.alexduzi.expensetracking.dto.request.CreateAccountDTO;
+import com.alexduzi.expensetracking.dto.response.AccountDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
 public interface AccountMapper {
     AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
     @Mapping(source = "type", target = "accountType")
-    AccountResponse toDto(Account entity);
+    AccountDTO toDto(Account entity);
 
     @Mapping(source = "accountType", target = "type")
-    Account toAccount(CreateAccountRequest dto);
+    Account toAccount(CreateAccountDTO dto);
 }

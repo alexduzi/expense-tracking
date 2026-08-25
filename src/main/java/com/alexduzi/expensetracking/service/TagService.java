@@ -1,9 +1,9 @@
 package com.alexduzi.expensetracking.service;
 
 import com.alexduzi.expensetracking.domain.Tag;
-import com.alexduzi.expensetracking.dto.request.CreateTagRequest;
-import com.alexduzi.expensetracking.dto.request.UpdateTagRequest;
-import com.alexduzi.expensetracking.dto.response.TagResponse;
+import com.alexduzi.expensetracking.dto.request.CreateTagDTO;
+import com.alexduzi.expensetracking.dto.request.UpdateTagDTO;
+import com.alexduzi.expensetracking.dto.response.TagDTO;
 import com.alexduzi.expensetracking.exception.*;
 import com.alexduzi.expensetracking.mapper.TagMapper;
 import com.alexduzi.expensetracking.repository.TagRepository;
@@ -22,11 +22,11 @@ public class TagService {
         this.tagMapper = tagMapper;
     }
 
-    public List<TagResponse> findAll() {
+    public List<TagDTO> findAll() {
         return tagRepository.findAll().stream().map(TagMapper.INSTANCE::toDto).toList();
     }
 
-    public TagResponse create(CreateTagRequest dto) {
+    public TagDTO create(CreateTagDTO dto) {
         Optional<Tag> tag = tagRepository.findTagByNameEqualsIgnoreCase(dto.name());
         if (tag.isPresent()) {
             throw new EntityAlreadyExistsException("Tag already exists");
@@ -39,7 +39,7 @@ public class TagService {
         }
     }
 
-    public TagResponse update(Long id, UpdateTagRequest dto) {
+    public TagDTO update(Long id, UpdateTagDTO dto) {
         if (!tagRepository.existsById(id)) {
             throw new EntityNotFoundException("Tag not found");
         }

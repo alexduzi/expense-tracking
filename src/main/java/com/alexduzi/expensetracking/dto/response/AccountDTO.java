@@ -4,7 +4,7 @@ import com.alexduzi.expensetracking.enums.AccountType;
 
 import java.math.BigDecimal;
 
-public record AccountResponse(
+public record AccountDTO(
         String name,
         BigDecimal balance,
         AccountType accountType,
