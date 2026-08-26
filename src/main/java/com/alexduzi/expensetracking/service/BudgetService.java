@@ -1,8 +1,11 @@
 package com.alexduzi.expensetracking.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.alexduzi.expensetracking.domain.Budget;
 import com.alexduzi.expensetracking.domain.Category;
-import com.alexduzi.expensetracking.domain.Tag;
 import com.alexduzi.expensetracking.domain.User;
 import com.alexduzi.expensetracking.dto.request.CreateBudgetDTO;
 import com.alexduzi.expensetracking.dto.request.UpdateBudgetDTO;
@@ -14,11 +17,8 @@ import com.alexduzi.expensetracking.mapper.BudgetMapper;
 import com.alexduzi.expensetracking.repository.BudgetRepository;
 import com.alexduzi.expensetracking.repository.CategoryRepository;
 import com.alexduzi.expensetracking.repository.UserRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import jakarta.transaction.Transactional;
 
 @Service
 public class BudgetService {
