@@ -15,7 +15,7 @@ import com.alexduzi.expensetracking.service.GoalService;
 
 
 @RestController
-@RequestMapping(path = "${api.prefix}/goal")
+@RequestMapping(path = "${api.prefix}/goals")
 public class GoalController {
     private final GoalRepository goalRepository;
     private final GoalService goalService;
@@ -25,12 +25,12 @@ public class GoalController {
         this.goalRepository = goalRepository;
     }
     
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<GoalDTO>> findAll() {
         return ResponseEntity.ok(goalService.findAll());
     }
     
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<GoalDTO> postMethodName(@RequestBody CreateGoalDTO request) {
         GoalDTO result = goalService.create(request);
         URI location = ServletUriComponentsBuilder
@@ -41,12 +41,12 @@ public class GoalController {
         return ResponseEntity.created(location).body(result);
     }
     
-    @PutMapping("update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<GoalDTO> update(@PathVariable Long id, @RequestBody UpdateGoalDTO request) {
         return ResponseEntity.ok(goalService.update(id, request));
     }
     
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         goalService.delete(id);
         return ResponseEntity.noContent().build();

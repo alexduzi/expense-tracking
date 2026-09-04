@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "${api.prefix}/budget")
+@RequestMapping(path = "${api.prefix}/budgets")
 public class BudgetController {
     private final BudgetService budgetService;
 
@@ -29,7 +29,7 @@ public class BudgetController {
         return ResponseEntity.ok(budgetService.findAll());
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<BudgetDTO> create(@RequestBody CreateBudgetDTO request) {
         BudgetDTO result = budgetService.create(request);
         URI location = ServletUriComponentsBuilder
@@ -40,12 +40,12 @@ public class BudgetController {
         return ResponseEntity.created(location).body(result);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<BudgetDTO> update(@PathVariable Long id, @RequestBody UpdateBudgetDTO request) {
         return ResponseEntity.ok(budgetService.update(id, request));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         budgetService.delete(id);
         return ResponseEntity.noContent().build();

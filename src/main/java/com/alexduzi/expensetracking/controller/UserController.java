@@ -14,7 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController()
-@RequestMapping(path = "${api.prefix}/user")
+@RequestMapping(path = "${api.prefix}/users")
 public class UserController {
     private final UserService userService;
 
@@ -23,7 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping
     public ResponseEntity<UserDTO> register(@Valid @RequestBody CreateUserDTO request) {
         UserDTO result = userService.create(request);
 

@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "${api.prefix}/category")
+@RequestMapping(path = "${api.prefix}/categories")
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -21,12 +21,12 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<CategoryDTO>> findAll() {
         return ResponseEntity.ok(categoryService.findAll());
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<CategoryDTO> create(@RequestBody CreateCategoryDTO request) {
         CategoryDTO result = categoryService.create(request);
         URI location = ServletUriComponentsBuilder
@@ -37,12 +37,12 @@ public class CategoryController {
         return ResponseEntity.created(location).body(result);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @RequestBody UpdateCategoryDTO request) {
         return ResponseEntity.ok(categoryService.update(id, request));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         categoryService.delete(id);
         return ResponseEntity.noContent().build();

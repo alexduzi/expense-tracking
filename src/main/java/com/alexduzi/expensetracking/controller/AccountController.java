@@ -14,7 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(path = "${api.prefix}/account")
+@RequestMapping(path = "${api.prefix}/accounts")
 public class AccountController {
     private final AccountService accountService;
 
@@ -22,7 +22,7 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<AccountDTO> create(@Valid @RequestBody CreateAccountDTO request) {
         AccountDTO result = accountService.create(request);
 

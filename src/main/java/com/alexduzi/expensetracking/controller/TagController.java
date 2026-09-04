@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "${api.prefix}/tag")
+@RequestMapping(path = "${api.prefix}/tags")
 public class TagController {
     private final TagService tagService;
 
@@ -20,12 +20,12 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<TagDTO>> findAll() {
         return ResponseEntity.ok(tagService.findAll());
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<TagDTO> create(@RequestBody CreateTagDTO request) {
         TagDTO result = tagService.create(request);
         URI location = ServletUriComponentsBuilder
@@ -36,13 +36,13 @@ public class TagController {
         return ResponseEntity.created(location).body(result);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TagDTO> update(@PathVariable Long id, @RequestBody UpdateTagDTO request) {
         TagDTO result = tagService.update(id, request);
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         tagService.delete(id);
         return ResponseEntity.noContent().build();
