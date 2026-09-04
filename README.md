@@ -1,10 +1,17 @@
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│ Expense Service │     │ Budget Service  │     │ Notification    │
-│                 │────▶│                 │────▶│ Service         │
-│ - criar gasto   │     │ -verificar      │     │ - email/push    │
-│ - categorizar   │     │  limite         │     │   quando limite │
-│ - salvar        │     │ -atualizar saldo│     │   atingido      │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
+```mermaid
+graph LR
+    A["**Expense Service**<br><br>• Criar gasto<br>• Categorizar<br>• Salvar"]
+    B["**Budget Service**<br><br>• Verificar limite<br>• Atualizar saldo"]
+    C["**Notification Service**<br><br>• Email/push quando<br>  limite atingido"]
+
+    A --> B
+    B --> C
+    
+    style A fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style B fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style C fill:#f9f9f9,stroke:#333,stroke-width:2px
+```
+
 
 expense-tracking/
 ├── expense-service/          # cria/deleta gastos + outbox
