@@ -13,17 +13,21 @@ graph LR
 ```
 
 
+# Estrutura do Projeto
+
+```text
 expense-tracking/
-├── expense-service/          # cria/deleta gastos + outbox
-│   ├── domain/
-│   ├── outbox/               # OutboxEvent, OutboxWorker
-│   └── kafka/                # producers
-├── budget-service/           # consome eventos, atualiza saldo
-│   ├── domain/
-│   └── kafka/                # consumers
-├── notification-service/     # envia email/push quando limite atingido
-├── docker-compose.yml        # PostgreSQL + Kafka
-└── README.md                 # documenta os padrões usados
+├── expense-service/          # Cria/deleta gastos + padrão Outbox
+│   ├── domain/               # Regras de negócio e entidades de gastos
+│   ├── outbox/               # Eventos de Outbox e o Worker de processamento
+│   └── kafka/                # Produtores de mensagens (envio de eventos)
+├── budget-service/           # Consome eventos e gerencia limites de saldo
+│   ├── domain/               # Regras de orçamento e cálculo de saldo
+│   └── kafka/                # Consumidores de mensagens (escuta o expense-service)
+├── notification-service/     # Dispara alertas (e-mail/push) se o limite estourar
+├── docker-compose.yml        # Infraestrutura local (PostgreSQL + Apache Kafka)
+└── README.md                 # Documentação principal e padrões arquiteturais
+```
 
 # Regras:
 
