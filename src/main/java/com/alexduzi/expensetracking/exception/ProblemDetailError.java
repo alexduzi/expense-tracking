@@ -1,26 +1,39 @@
 package com.alexduzi.expensetracking.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 
-public class StandardError implements Serializable {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ProblemDetailError implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private Instant timestamp;
     private Integer status;
     private String error;
+    private String title;
+    private String detail;
     private String message;
     private String path;
 
-    public StandardError() {
+    public ProblemDetailError() {
     }
 
-    public StandardError(Instant timestamp, Integer status, String error, String message, String path) {
+    public ProblemDetailError(Instant timestamp,
+                              Integer status,
+                              String error,
+                              String title,
+                              String detail,
+                              String message,
+                              String path) {
         this.timestamp = timestamp;
         this.status = status;
         this.error = error;
+        this.title = title;
+        this.detail = detail;
         this.message = message;
         this.path = path;
     }
@@ -63,5 +76,21 @@ public class StandardError implements Serializable {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

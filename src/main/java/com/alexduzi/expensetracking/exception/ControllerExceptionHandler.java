@@ -1,61 +1,98 @@
 package com.alexduzi.expensetracking.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.jspecify.annotations.Nullable;
+import org.springframework.http.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class ControllerExceptionHandler {
+public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DatabaseException.class)
-    public ResponseEntity<StandardError> databaseError(DatabaseException e, HttpServletRequest request) {
+    public ResponseEntity<?> databaseError(DatabaseException ex, WebRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        return ResponseEntity.status(status).body(
-                createStandardError("Database err", status, e, request));
+        ProblemType problemType = ProblemType.DATABASE_EXCEPTION;
+
+        ProblemDetailError detail = createProblemDetailError(ex.getMessage(), status, problemType, ex, request);
+
+        return handleExceptionInternal(ex,
+                detail,
+                new HttpHeaders(),
+                status,
+                request);
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
-    public ResponseEntity<StandardError> entityAlreadyExistsException(EntityAlreadyExistsException e, HttpServletRequest request) {
+    public ResponseEntity<?> entityAlreadyExistsException(EntityAlreadyExistsException ex, WebRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        return ResponseEntity.status(status).body(
-                createStandardError(e.getMessage(), status, e, request));
+        ProblemType problemType = ProblemType.ENTITY_ALREADY_EXISTS_EXCEPTION;
+
+        ProblemDetailError detail = createProblemDetailError(ex.getMessage(), status, problemType, ex, request);
+
+        return handleExceptionInternal(ex,
+                detail,
+                new HttpHeaders(),
+                status,
+                request);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<StandardError> entityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
+    public ResponseEntity<?> entityNotFoundException(EntityNotFoundException ex, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        return ResponseEntity.status(status).body(
-                createStandardError(e.getMessage(), status, e, request));
+        ProblemType problemType = ProblemType.ENTITY_NOT_FOUND_EXCEPTION;
+
+        ProblemDetailError detail = createProblemDetailError(ex.getMessage(), status, problemType, ex, request);
+
+        return handleExceptionInternal(ex,
+                detail,
+                new HttpHeaders(),
+                status,
+                request);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> validation(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<Map<String, String>> handleValidationError(MethodArgumentNotValidException ex) {
+//        Map<String, String> errors = new HashMap<>();
+//
+//        ex.getBindingResult().getAllErrors().forEach((error) -> {
+//            String fieldName = ((FieldError) error).getField();
+//            String errorMessage = error.getDefaultMessage();
+//            errors.put(fieldName, errorMessage);
+//        });
+//
+//        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+//    }
 
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
+    @Override
+    protected @Nullable ResponseEntity<Object> handleExceptionInternal(Exception ex,
+                                                                       @Nullable Object body,
+                                                                       HttpHeaders headers,
+                                                                       HttpStatusCode statusCode,
+                                                                       WebRequest request) {
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        return super.handleExceptionInternal(ex, body, headers, statusCode, request);
     }
 
-    private StandardError createStandardError(String message, HttpStatus status, RuntimeException e, HttpServletRequest request) {
-        return new StandardError(
+    private ProblemDetailError createProblemDetailError(String message, HttpStatus status, ProblemType problemType,
+                                                        RuntimeException e, WebRequest request) {
+        return new ProblemDetailError(
                 Instant.now(),
                 status.value(),
                 message,
+                problemType.getTitle(),
+                problemType.getUri(),
                 e.getMessage(),
-                request.getRequestURI()
+                request.getContextPath()
         );
     }
 
